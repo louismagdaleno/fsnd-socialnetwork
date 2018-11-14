@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="content-section">
+
+            {% if current_user.is_authenticated %}
+                {% for post in posts %}
+                <article class="media content-section" id="post">
+                    <div class="media-body">
+                        <div class="article-metadata">
+                            <a class="mr-3">
+                                <span style="float: left" href="#"><b>{{post.title}}</b></span>
+                            </a>
+                        </div>
+                        <p class="article-content"><small>{{ post.text }}</small></p>
+
+                        <footer>
+                            <span style="float: left"><small>
+                                    <p>
+                                        Posted on
+                                        {{ post.time_updated.strftime('%A %B %d, %Y') }}
+                                        by <b>{{ post.author.name }}</b>.
+                                    </p>
+                                <img style='height: 48px; width: 48px' align='left' src="{{url_for('static',filename='profile_pics/'+post.author.profile_image)}}">
+                                </small></span>
+                            {% if post.author.id == current_user.id %}
+                            <span style="float: right">
+                                <form action="{{ url_for('post.update_post', post_id=post.id) }}" method="GET">
+                                     <button type="submit"><img src="{{ url_for('static', filename='img/edit.svg') }}" style="height:20px; width: 20px" ></button>
+                                </form>
+                                <form action="{{ url_for('post.delete_post', post_id=post.id) }}" method="POST">
+                                    <button type="submit" value="Delete"><img src="{{ url_for('static', filename='img/garbage.svg') }}" style="height:20px; width: 20px" ></button>
+                                </form>
+                            </span>
+                            {% endif %}
+                        </footer>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        {% else %}
+           <div class="jumbotron" id="calltoaction">
+              <h1 class="display-4">Connect your world!</h1>
+              <p class="lead">Sign up now to stay in the loop with all of your friends.</p>
+              <hr class="my-4">
+              <p>This is a demo social networking website built for the Udacity Full-Stack Developer Nanodegree.</p>
+              <a class="btn btn-primary btn-lg" href="{{ url_for('users.register') }}" role="button">Click Here to Register!</a>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock content %}
