@@ -1,0 +1,2 @@
+# fsnd-socialnetwork
+wsgi application
